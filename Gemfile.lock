@@ -1,0 +1,18 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    addressable (2.3.8)
+    faraday (0.9.1)
+      multipart-post (>= 1.2, < 3)
+    koala (2.0.0)
+      addressable
+      faraday
+      multi_json
+    multi_json (1.11.0)
+    multipart-post (2.0.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  koala (~> 2.0)
