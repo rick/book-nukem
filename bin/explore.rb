@@ -4,6 +4,21 @@ require 'koala'
 require 'yaml'
 require 'pp'
 
+class Graph
+  attr_reader :creds, :access_token, :graph
+  def initialize
+    @creds = YAML.load(File.read(File.expand_path('~/.facebook.yml')))
+    @access_token = creds["access_token"]
+    @graph = Koala::Facebook::API.new(access_token)
+  end
+
+  def method_missing(meth, *args)
+    if graph.respond_to? meth
+      graph.send(meth, *args)
+    end
+  end
+end
+
 def display_post(post, post_count)
   likes = post["likes"] ? post["likes"]["data"] : []
   comments = post["comments"] ? post["comments"]["data"] : []
@@ -36,11 +51,5 @@ def iterate_over_posts(graph)
   puts "A total of #{post_count} posts, with #{likes_count} likes and #{comments_count} comments."
 end
 
-def initialize_graph
-  # read ~/.facebook.yml
-  creds = YAML.load(File.read(File.expand_path('~/.facebook.yml')))
-  access_token = creds["access_token"]
-  graph = Koala::Facebook::API.new(access_token)
-end
-
-iterate_over_posts initialize_graph
+graph = Graph.new
+iterate_over_posts(graph)
