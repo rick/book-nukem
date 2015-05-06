@@ -40,6 +40,7 @@ graph = Graph.new
 likes.each do |like|
   puts "deleting like for object [#{like.inspect}]"
   begin
+    pp [ like["object_id"], graph.get_object(like["object_id"]) ]
     graph.delete_like(like["object_id"])
   rescue Koala::Facebook::ClientError => e
     puts "Warning: got exception [#{e}].  Continuing..."
