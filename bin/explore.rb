@@ -51,5 +51,35 @@ def iterate_over_posts(graph)
   puts "A total of #{post_count} posts, with #{likes_count} likes and #{comments_count} comments."
 end
 
+def iterate_over_likes(graph)
+  data = graph.get_connections("me", "likes")
+  likes_count = 0
+  while data
+    data.each do |like|
+      likes_count += 1
+      pp like
+    end
+    data = data.next_page
+  end
+  puts "Total of #{likes_count} likes."
+end
+
+def iterate(graph, type)
+  data = graph.get_connections("me", type)
+  count = 0
+  while data
+    data.each do |item|
+      count += 1
+      pp item
+    end
+    data = data.next_page
+  end
+  puts %Q{Total of #{count} "#{type}" items.}
+end
+
 graph = Graph.new
-iterate_over_posts(graph)
+# iterate_over_posts graph
+# iterate_over_likes graph # pages likes
+
+type = ARGV.shift or raise "Usage: #{$0} <type>"
+iterate graph, type
