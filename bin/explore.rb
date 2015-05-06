@@ -17,6 +17,10 @@ class Graph
       graph.send(meth, *args)
     end
   end
+
+  def me
+    graph.get_object("me")
+  end
 end
 
 def display_post(post, post_count)
