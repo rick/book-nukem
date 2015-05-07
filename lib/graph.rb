@@ -9,6 +9,19 @@ class Graph
     @graph = Koala::Facebook::API.new(access_token)
   end
 
+  def iterate(type)
+    data = graph.get_connections("me", type)
+    count = 0
+    while data
+      data.each do |item|
+        count += 1
+        pp item
+      end
+      data = data.next_page
+    end
+    puts %Q{Total of #{count} "#{type}" items.}
+  end
+
   def method_missing(meth, *args)
     if graph.respond_to? meth
       graph.send(meth, *args)
