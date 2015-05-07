@@ -11,7 +11,7 @@ class Graph
   # a Koala::Facebook::API instance.
   def initialize
     @creds = YAML.load(File.read(File.expand_path('~/.facebook.yml')))
-    @access_token = creds["access_token"]
+    @access_token = creds["access_token"] or raise "`access_token` is required in `~/.facebook.yml`"
     @graph = Koala::Facebook::API.new(access_token)
   end
 
@@ -24,7 +24,6 @@ class Graph
   # returns the list of all found objects
   def iterate(type, &block)
     data = graph.get_connections("me", type)
-    count = 0
     while data
       results = data.inject([]) do |list, item|
         if block_given?
