@@ -28,7 +28,7 @@ class Graph
     while data
       results = data.inject([]) do |list, item|
         if block_given?
-          yield(item)
+          yield(graph, item)
         else
           pp item
         end

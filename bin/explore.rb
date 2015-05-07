@@ -29,8 +29,32 @@ command :list do |c|
     type = args.shift or raise "a type is required. See --help"
 
     counter = 0
-    results = Graph.new.iterate(type) do |item|
+    results = Graph.new.iterate(type) do |graph, item|
       pp item
+      counter += 1
+      break if options.max && counter >= options.max
+    end
+  end
+end
+
+command :delete do |c|
+  c.syntax = ' delete <type>'
+  c.summary = 'delete objects of a certain type, e.g., "posts", "inbox", ...'
+  c.description = 'This will delete all instances of a given type of object'
+
+  c.option '--max COUNT', Integer, "Maximum number of records to delete"
+
+  c.example 'deleting posts', %Q|
+  |
+
+  c.action do |args, options|
+    type = args.shift or raise "a type is required. See --help"
+
+    counter = 0
+    results = Graph.new.iterate(type) do |graph, item|
+      pp item
+      puts "deleting item with id [#{item["id"]}]..."
+      graph.delete_object(item["id"])
       counter += 1
       break if options.max && counter >= options.max
     end
