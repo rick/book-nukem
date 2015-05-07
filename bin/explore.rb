@@ -6,4 +6,11 @@ require 'pp'
 require 'graph'
 
 type = ARGV.shift or raise "Usage: #{$0} <type>"
-Graph.new.iterate type
+
+counter = 0
+
+results = Graph.new.iterate(type) do |item|
+  puts "I found one!"
+  counter += 1
+  break if counter > 5
+end
