@@ -1,28 +1,10 @@
 #!/usr/bin/env ruby
 
-require 'koala'
-require 'yaml'
+$:.unshift(File.expand_path(File.join(File.dirname(__FILE__), "..", "lib")))
+
 require 'pp'
 require 'fql'
-
-class Graph
-  attr_reader :creds, :access_token, :graph
-  def initialize
-    @creds = YAML.load(File.read(File.expand_path('~/.facebook.yml')))
-    @access_token = creds["access_token"]
-    @graph = Koala::Facebook::API.new(access_token)
-  end
-
-  def method_missing(meth, *args)
-    if graph.respond_to? meth
-      graph.send(meth, *args)
-    end
-  end
-
-  def me
-    graph.get_object("me")
-  end
-end
+require 'graph'
 
 def fql(query)
   options = { :access_token => Graph.new.access_token }
